@@ -1,12 +1,10 @@
-<title>Cedonia Luxury Showroom</title>
-
 <script lang="ts">
-    import { cars } from '../store/carsStore.ts';
-    import CarCard from "../components/CarCard.svelte";
-    import Navbar from '../components/Navbar.svelte';
-    import AddCarForm from '../components/AddCarForm.svelte';
+    import { cars } from '../../store/carsStore.ts';
+    import CarCard from '../../components/CarCard.svelte';
+    import Navbar from '../../components/Navbar.svelte';
+    import AddCarForm from '../../components/AddCarForm.svelte';
 
-    let currentPage: string = 'home';
+    let currentPage: string = 'sedan';
 
     const setCurrentPage = (page: string): void => {
         currentPage = page;
@@ -16,11 +14,11 @@
 <Navbar setCurrentPage={setCurrentPage}/>
 
 <div class="main-content">
-    {#if currentPage === 'home'}
+    {#if currentPage === 'sedan'}
         <section class="welcome-section">
-            <h1>Welcome to Cedonia Luxury Showroom</h1>
-            <p>Discover your perfect vehicle from our extensive collection of exclusive luxury cars, designed to offer unmatched performance and elegance.</p>
-            <p>At Cedonia, we offer an exceptional selection of high-end automobiles, tailored to meet your desires for comfort, style, and precision engineering. Explore the world of automotive luxury like never before.</p>
+            <h1>Welcome to Cedonia Luxury Showroom - Sedan Collection</h1>
+            <p>Experience the epitome of sophistication with our exclusive range of luxury sedans, crafted to combine elegance, comfort, and top-tier performance.</p>
+            <p>At Cedonia, our sedan collection offers the perfect balance of refined design and cutting-edge engineering, tailored to meet your every need for daily drives or long journeys. Discover unparalleled comfort and a smooth driving experience, redefining what it means to drive a sedan.</p>
         </section>
 
         <section class="car-showcase">
@@ -37,11 +35,6 @@
                 {/each}
             </div>
         </section>
-
-        <a href="/#" on:click={() => setCurrentPage('addCar')} class="floating-button" title="Add Car">
-            <span>+</span>
-        </a>
-
     {/if}
 
     {#if currentPage === 'addCar'}
@@ -51,10 +44,8 @@
 
 <style>
     .main-content
-    {
-        margin-left: 300px;
-        padding: 40px;
-        max-width: 1200px;
+     {
+        padding: 20px;
     }
 
     .welcome-section
@@ -113,40 +104,10 @@
         margin-top: 40px;
     }
 
-    .car-grid
+    .car-grid 
     {
         display: flex;
         flex-wrap: wrap;
-        gap: 30px;
-        padding: 20px 0;
-    }
-
-    .floating-button
-    {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        width: 60px;
-        height: 60px;
-        background-color: #007BFF;
-        color: white;
-        font-size: 30px;
-        font-weight: bold;
-        border: none;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
-        cursor: pointer;
-        text-decoration: none;
-        text-align: center;
-        transition: background-color 0.3 ease, transform 0.2 ease;
-    }
-
-    .floating-button:hover
-    {
-        background-color: #0056b3;
-        transform: scale(1.1);
+        gap: 20px;
     }
 </style>
