@@ -1,0 +1,130 @@
+<script>
+    export let category;
+    export let name;
+    export let specs;
+    export let price;
+    export let image;
+</script>
+
+<div class="car-card">
+    <div class="car-image">
+        <img src={image} alt={category}>
+    </div>
+    <div class="car-details">
+        <div class="car-category">{category}</div>
+        <h3 class="car-name">{name}</h3>
+        <div class="car-specs">
+            {#each specs as spec}
+                <span class="spec-item">{spec}</span>
+            {/each}
+        </div>
+        <div class="car-price">{price}</div>
+        <a href="/#" class="view-details">View Details</a>
+    </div>
+</div>
+
+<style>
+    .car-card
+    {
+        flex: 1;
+        min-width: 300px;
+        max-width: calc(33.333% - 20px);
+        background-color: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        position: relative;
+    }
+
+    .car-card:hover
+    {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .car-image
+    {
+        width: 100%;
+        height: 200px;
+        background-color: #f8f9fa;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .car-image img
+    {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+    .car-card:hover .car-image img
+    {
+        transform: scale(1.05);
+    }
+
+    .car-details
+    {
+        padding: 25px;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .car-category
+    {
+        font-size: 0.9em;
+        color: #1565c0;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .car-name
+    {
+        font-size: 1.5em;
+        color: #2c3e50;
+        font-weight: 600;
+        margin: 0;
+    }
+
+    .car-specs
+    {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .spec-item
+    {
+        flex: 1;
+        min-width: calc(50% - 8px);
+        font-size: 0.9em;
+        color: #64748b;
+    }
+
+    .car-price
+    {
+        font-size: 1.2em;
+        color: #1565c0;
+        font-weight: 600;
+    }
+
+    .view-details
+    {
+        display: inline-block;
+        color: #1565c0;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 0.95em;
+        padding: 8px 0;
+        position: relative;
+        align-self: flex-start;
+    }
+
+    .view-details:hover::after
+    {
+        width: 100%;
+    }
+</style>
