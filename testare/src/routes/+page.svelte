@@ -1,5 +1,3 @@
-<title>Cedonia Luxury Showroom</title>
-
 <script lang="ts">
     import { cars } from '../store/carsStore.ts';
     import { searchVehicles } from '../utils/searchVehicles.ts';
@@ -7,6 +5,8 @@
     import Navbar from '../components/Navbar.svelte';
     import AddCarForm from '../components/AddCarForm.svelte';
     import SearchBar from '../components/SearchBar.svelte';
+    import FilterRange from '../components/FilterRange.svelte';
+    import SortNames from '../components/SortNames.svelte';
 
     let currentPage: string = 'home';
 
@@ -15,28 +15,60 @@
     }
 
     let searchQuery = "";
-    let filteredCars = cars;
+    let filteredCars = $cars;
+    let min = 0;
+    let max = 0;
+    let minValue = 0;
+    let maxValue = 0;
+    let sortOrder = "asc";
+
+    // If there are cars in the sotre, we calculate the maximum price
+    // If there are no cars, we set the max value to 0
+    $: if ($cars.length > 0)
+    {
+        max = Math.max(...$cars.map(car => parseInt(car.price.replace(/[^0-9]/g, ''))));
+    }
+    else
+    {
+        max = 0;
+    }
+
+    $: maxValue = max;
+
+    // Update sorting order
+    const setSortOrder = (order: string) => { sortOrder = order; };
 
     // !! Use reactive block to update the filter search !!
     $: {
-        if (searchQuery)
-        {
-            filteredCars = searchVehicles($cars, searchQuery);
-        }
-        else
-        {
-            filteredCars = $cars;
-        }
-    }
+        let items = [...$cars];
 
-    function handleSearch(query: string): void 
-    {
-        searchQuery = query;
+        if (searchQuery.trim())
+        {
+            items = searchVehicles(items, searchQuery);
+        }
+        
+        if (min !== 0 || max !== Infinity)
+        {
+            items = items.filter(item => {
+                let price = parseInt(item.price.replace(/[^0-9]/g, ''));
+                return price >= minValue && price <= maxValue;
+            });
+        }
+
+        items.sort((a, b) => {
+            if (sortOrder === "asc") { return a.name.localeCompare(b.name); }
+            else { return b.name.localeCompare(a.name); }
+        })
+
+        filteredCars = items;
     }
 </script>
 
+<svelte:head><title>Cedonia Luxury Showroom</title></svelte:head>
 <Navbar setCurrentPage={setCurrentPage}/>
-<SearchBar onSearch={handleSearch} />
+<SearchBar bind:searchQuery />
+<FilterRange {min} {max} bind:minValue bind:maxValue />
+<SortNames bind:sortOrder setSortOrder={setSortOrder} />
 
 <div class="main-content">
     {#if currentPage === 'home'}

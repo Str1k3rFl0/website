@@ -1,12 +1,5 @@
 <script lang="ts">
-    export let onSearch;
-    let searchQuery = "";
-
-    function handleInput(event)
-    {
-        searchQuery = event.target.value;
-        onSearch(searchQuery);
-    }
+    export let searchQuery = "";
 </script>
 
 <div class="search-wrapper">
@@ -15,7 +8,6 @@
             type="text"
             placeholder="Search any cars..."
             bind:value={searchQuery}
-            on:input={handleInput}
         />
     </div>
 </div>
@@ -35,8 +27,9 @@
         width: 10;
         top: 270px;
         max-width: 400px;
-        position: absolute;
+        position: fixed;
         z-index: 1000;
+        left: 20px;
     }
 
     input[type="text"]
