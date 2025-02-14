@@ -5,41 +5,69 @@
     let name = "";
     let specs = "";
     let price = "";
-    let image = "";
-
-    let imageFile: File | null = null;
-    let imagePreview = "";
+    let images: File[] = [];
+    let imagePreviews: string[] = [];
     let imageInput: HTMLInputElement;
 
-    const addCar = (event:SubmitEvent & { target: HTMLFormElement }) => {
-        const file = imageInput.files[0];
-        const image = "/images/" + file.name;
-        const newCar = {
-            category,
-            name,
-            specs: specs.split(","),
-            price,
-            image,
-        };
+    //let imageFile: File | null = null;
+    //let imagePreview = "";
+    //let imageInput: HTMLInputElement;
 
-        cars.update(currentCars => [newCar, ...currentCars]);
-        event.target.reset();
-        category = "Sedan";
+const addCar = (event: SubmitEvent & { target: HTMLFormElement }) => {
+    if (images.length === 0)
+    {
+        alert("Please select at least one image!");
+        return;
     }
 
-    const handleFileChange = (event: Event) => {
-        const file = imageInput.files[0];
-        if (file)
-        {
+    const imagePaths: string[] = [];
+    images.forEach(file => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            imagePaths.push(reader.result as string);
+            if (imagePaths.length === images.length)
+            {
+                const newCar = {
+                    category,
+                    name,
+                    specs: specs.split(","),
+                    price,
+                    images: imagePaths,
+                };
+
+                cars.update(currentCars => [newCar, ...currentCars]);
+
+                event.target.reset();
+                category = "Sedan";
+                name = "";
+                specs = "";
+                price = "";
+                images = [];
+                imagePreview = [];
+            }
+        };
+        reader.readAsDataURL(file);
+    });
+};
+
+const handleFileChange = (event: Event) => {
+    const files = imageInput.files;
+    if (files) 
+    {
+        images = [...images, ...Array.from(imageInput.files)];
+        imagePreviews = [];
+
+        images.forEach(file => {
             const reader = new FileReader();
             reader.onloadend = () => {
-                imagePreview = reader.result as string;
+                imagePreviews = [...imagePreviews, reader.result as string];
             };
             reader.readAsDataURL(file);
-        }
-    };
+        });
+    }
+};
 
-    $: console.log(imageFile);
+    $: console.log(images);
 </script>
 
 <div class="form-container">
@@ -71,12 +99,16 @@
 
         <label>
             Image
-            <input bind:this={imageInput} type="file" accept="image/*" on:change={handleFileChange} />
+            <input bind:this={imageInput} type="file" accept="image/*" multiple on:change={handleFileChange} />
         </label>
 
-        {#if imagePreview}
-            <div class="image-preview">
-                <img src={imagePreview} alt="" width="200" />
+        {#if imagePreviews.length > 0}
+            <div class="image-previews">
+                {#each imagePreviews as imagePreview}
+                    <div class="image-preview">
+                        <img src={imagePreview} alt="Preview" width="200" />
+                    </div>
+                {/each}
             </div>
         {/if}
 
@@ -147,13 +179,16 @@
         background-color: #0056b3;
     }
 
-    .image-preview
+    .image-previews
     {
         text-align: center;
         margin-top: 10px;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
     }
 
-    .image-preview img
+    .image-previews img
     {
         border-radius: 5px;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);

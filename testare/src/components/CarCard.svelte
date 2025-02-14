@@ -1,15 +1,31 @@
-<script>
+<script lang="ts">
     export let category;
     export let name;
     export let specs;
     export let price;
-    export let image;
+    export let images: string[];
+
+    let currentImageIndex = 0;
+
+    const nextImage = () => {
+        currentImageIndex = (currentImageIndex + 1) % images.length;
+    }
+
+    const prevImage = () => {
+        currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
+    }
 </script>
 
 <div class="car-card">
-    <div class="car-image">
-        <img src={image} alt={category}>
-    </div>
+    {#if images.length > 0}
+        <div class="car-image">
+            <img src={images[currentImageIndex]} alt={category} width="200" />
+            {#if images.length > 1}
+                <button class="nav-button prev" on:click={prevImage}>‹</button>
+                <button class="nav-button next" on:click={nextImage}>›</button>
+            {/if}
+        </div>
+    {/if}
     <div class="car-details">
         <div class="car-category">{category}</div>
         <h3 class="car-name">{name}</h3>
@@ -126,5 +142,27 @@
     .view-details:hover::after
     {
         width: 100%;
+    }
+
+    .nav-button
+    {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(0, 0, 0, 0.5);
+        color: white;
+        border: none;
+        padding: 10px;
+        cursor: pointer;
+    }
+
+    .prev
+    {
+        left: 10px;
+    }
+
+    .next
+    {
+        right: 10px;
     }
 </style>

@@ -88,7 +88,7 @@
                             name={car.name}
                             specs={car.specs}
                             price={car.price}
-                            image={car.image}
+                            images={car.images}
                         />
                     {/each}
                 {:else}
