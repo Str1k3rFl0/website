@@ -43,7 +43,7 @@ const addCar = (event: SubmitEvent & { target: HTMLFormElement }) => {
                 specs = "";
                 price = "";
                 images = [];
-                imagePreview = [];
+                imagePreviews = [];
             }
         };
         reader.readAsDataURL(file);

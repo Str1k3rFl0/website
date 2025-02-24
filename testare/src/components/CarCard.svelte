@@ -14,6 +14,8 @@
     const prevImage = () => {
         currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
     }
+
+    $: slug = name.toLowerCase().replace(/\s+/g, '-');
 </script>
 
 <div class="car-card">
@@ -35,7 +37,7 @@
             {/each}
         </div>
         <div class="car-price">{price}</div>
-        <a href="/#" class="view-details">View Details</a>
+        <a href="/car/{slug}" class="view-details">View Details</a>
     </div>
 </div>
 
